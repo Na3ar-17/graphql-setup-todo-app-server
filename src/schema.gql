@@ -27,4 +27,6 @@ type Mutation {
 
 input UpdateTodoInput {
   id: String!
+  title: String
+  isCompleted: Boolean
 }

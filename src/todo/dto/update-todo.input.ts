@@ -1,17 +1,13 @@
-import {
-  Field,
-  InputType,
-  Int,
-  OmitType,
-  PartialType,
-  PickType,
-} from '@nestjs/graphql';
-import { Todo } from '../entities/todo.entity';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateTodoInput extends PartialType(
-  OmitType(Todo, ['createdAt', 'updatedAt']),
-) {
+export class UpdateTodoInput {
   @Field(() => String)
   id: string;
+
+  @Field({ nullable: true })
+  title?: string;
+
+  @Field({ nullable: true })
+  isCompleted?: boolean;
 }
