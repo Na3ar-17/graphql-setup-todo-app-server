@@ -51,7 +51,7 @@ export class TodoService {
     });
   }
 
-  async remove(id: string) {
+  async delete(id: string) {
     const todo = await this.findOne(id);
 
     return await this.prisma.todo.delete({
