@@ -7,7 +7,7 @@ import { TodoService } from './todo.service';
 export class TodoResolver {
   constructor(private readonly todoService: TodoService) {}
 
-  @Query(() => Todo)
+  @Query(() => [Todo])
   async findAll() {
     return await this.todoService.findAll();
   }
