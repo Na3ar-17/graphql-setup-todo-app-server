@@ -1,9 +1,16 @@
-import { Field, InputType, Int, PartialType, PickType } from '@nestjs/graphql';
+import {
+  Field,
+  InputType,
+  Int,
+  OmitType,
+  PartialType,
+  PickType,
+} from '@nestjs/graphql';
 import { Todo } from '../entities/todo.entity';
 
 @InputType()
 export class UpdateTodoInput extends PartialType(
-  PickType(Todo, ['title', 'isCompleted']),
+  OmitType(Todo, ['createdAt', 'updatedAt']),
 ) {
   @Field(() => String)
   id: string;

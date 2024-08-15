@@ -1,26 +1,63 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTodoInput } from './dto/create-todo.input';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateTodoInput } from './dto/update-todo.input';
 
 @Injectable()
 export class TodoService {
-  create(createTodoInput: CreateTodoInput) {
-    return 'This action adds a new todo';
+  constructor(private prisma: PrismaService) {}
+
+  async create() {
+    const todos = await this.findAll();
+
+    const newTodo = await this.prisma.todo.create({
+      data: {
+        isCompleted: false,
+        title: todos.length < 1 ? 'Untitled' : `Untitled ${todos.length}`,
+      },
+    });
+
+    return newTodo;
   }
 
-  findAll() {
-    return `This action returns all todo`;
+  async findAll() {
+    return await this.prisma.todo.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} todo`;
+  async findOne(id: string) {
+    const todo = await this.prisma.todo.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!todo) {
+      throw new Error('Not found');
+    }
+
+    return todo;
   }
 
-  update(id: number, updateTodoInput: UpdateTodoInput) {
-    return `This action updates a #${id} todo`;
+  async update(updateTodoInput: UpdateTodoInput) {
+    const todo = await this.findOne(updateTodoInput.id);
+
+    return await this.prisma.todo.update({
+      where: {
+        id: todo.id,
+      },
+      data: {
+        title: updateTodoInput.title,
+        isCompleted: updateTodoInput.isCompleted,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} todo`;
+  async remove(id: string) {
+    const todo = await this.findOne(id);
+
+    return await this.prisma.todo.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
