@@ -12,7 +12,7 @@ export class TodoService {
     const newTodo = await this.prisma.todo.create({
       data: {
         isCompleted: false,
-        title: todos.length < 1 ? 'Untitled' : `Untitled ${todos.length}`,
+        title: todos.length < 1 ? 'Untitled' : `Untitled ${todos.length + 1}`,
       },
     });
 
